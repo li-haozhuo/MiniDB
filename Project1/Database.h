@@ -2,6 +2,8 @@
 #include <string>
 #include <optional>
 #include <unordered_map>
+#include <vector>
+#include <cstddef>
 
 class Database {
 private:
@@ -13,5 +15,7 @@ public:
 	std::optional<std::string> get(const std::string& key) const;
 	bool exists(const std::string& key) const;
 	bool remove(const std::string& key);
-	size_t size() const;
+	
+	std::size_t size() const;
+	std::vector<std::string> keys() const;
 };

@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "Database.h"
 
 void Database::set(const std::string& key, const std::string& value) {
@@ -20,4 +21,15 @@ bool Database::exists(const std::string& key) const {
 }
 size_t Database::size() const {
 	return data.size();
+}
+
+std::vector<std::string> Database::keys() const {
+	std::vector<std::string> result;
+	result.reserve(data.size());
+
+	for (const auto& pair : data) {
+		result.push_back(pair.first);
+	}
+	std::sort(result.begin(), result.end());
+	return result;
 }
