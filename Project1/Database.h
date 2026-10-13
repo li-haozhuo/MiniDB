@@ -18,4 +18,7 @@ public:
 	
 	std::size_t size() const;
 	std::vector<std::string> keys() const;
+
+	bool save(const std::string& filename) const;
+	std::string load(const std::string& filename);
 };
