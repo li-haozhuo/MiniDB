@@ -1,0 +1,3 @@
+name=JLA
+hero=batman
+city=new york

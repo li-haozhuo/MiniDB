@@ -2,9 +2,10 @@
 #include <string>
 #include "Database.h"
 
-struct Response {
-	std::string text;
-	bool quit = false;
+class CommandProcessor {
+private:
+	Database& db;
+public:
+	CommandProcessor(Database& database);
+	std::string execute(const std::string& input);
 };
-
-Response processCommand(Database& db, const std::string& line);

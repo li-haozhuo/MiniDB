@@ -1,10 +1,25 @@
 #include <algorithm>
 #include <fstream>
 #include <string>
+#include <stdexcept>
 #include "Database.h"
 
+const std::string DB_FILE = "minidb.db";
+
+Database::Database() {
+	load(DB_FILE);
+}
+
 void Database::set(const std::string& key, const std::string& value) {
+	if (key.empty()) {
+		throw std::invalid_argument("key cannot be empty");
+	}
+	if (key.find('=') != std::string::npos) {
+		throw std::invalid_argument("key cannot contain '=' character");
+	}
+
 	data[key] = value;
+	save(DB_FILE);
 }
 
 std::optional<std::string> Database::get(const std::string& key) const {
@@ -16,7 +31,11 @@ std::optional<std::string> Database::get(const std::string& key) const {
 }
 
 bool Database::remove(const std::string& key) {
-	return data.erase(key) > 0;
+	bool erased = data.erase(key) > 0;
+	if (erased) {
+		save(DB_FILE);
+	}
+	return erased;
 }
 bool Database::exists(const std::string& key) const {
 	return data.find(key) != data.end();

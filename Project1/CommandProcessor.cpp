@@ -1,7 +1,9 @@
 #include <sstream>
 #include <vector>
 #include <cctype>
+#include <stdexcept>
 #include "CommandProcessor.h"
+
 using namespace std;
 
 namespace {
@@ -16,7 +18,9 @@ namespace {
 	}
 }
 
-Response processCommand(Database& db, const string& line) {
+CommandProcessor::CommandProcessor(Database& database) : db(database) {}
+
+string CommandProcessor::execute(const string& line) {
 	if (line.empty()) return { "" };
 
 	istringstream iss(line);
@@ -51,8 +55,13 @@ Response processCommand(Database& db, const string& line) {
 		getline(iss >> ws, value);
 
 		if (key.empty() || value.empty()) return { wrongArgs(cmd) };
-		db.set(key, value);
-		return { "OK" };
+		try {
+			db.set(key, value);
+			return "OK";
+		}
+		catch (const std::invalid_argument& e) {
+			return string("ERR ") + e.what();
+		}
 	}
 	else if (cmd == "DEL") {
 		string key, extra;
